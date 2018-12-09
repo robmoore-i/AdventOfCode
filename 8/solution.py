@@ -14,11 +14,7 @@ class Node:
     return "(" + str(self.metadata) + ")<" + str(self.children) + ">"
 
   def sum_metadata(self):
-    v = sum(self.metadata)
-    for c in self.children:
-      v += c.sum_metadata()
-
-    return v
+    return sum(self.metadata) + sum([c.sum_metadata() for c in self.children])
 
   def value(self):
     if self.n_children == 0:
