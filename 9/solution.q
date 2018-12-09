@@ -44,6 +44,6 @@ highScore:{[p;lastMarble]
 answerp1:highScore[nPlayers;lastMarblePoints]
 
 -1 "The answer to part 1 is ",string answerp1;
--1 "The answer to part 2 is not in Q because I can't make a performant solution using only arrays (So I made a haskell solution using linked lists)"
+-1 "The answer to part 2 is not in Q because I can't make a performant solution using only arrays (So I made a python solution using linked lists)"
 
 exit 0
