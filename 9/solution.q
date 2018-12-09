@@ -12,26 +12,38 @@ place:{[l;c;i;s;p]
     place23[l;c;i;s;p];
     placeStandard[l;c;i;s;p]]}
 
+nextPlayer:{[p;s](p+1)mod count s}
+
 // Pre: c+1 is a multiple of 23
 place23:{[l;c;i;s;p]
-  nextMarble:c+1;
-  removedMarble:l[i-7];
-  addedScore:nextMarble+removedMarble;
-  0N}
+  removedMarbleIndex:(i-7) mod count l;
+  removedMarble:l[removedMarbleIndex];
+  addedScore:(c+1)+removedMarble;
+  s[p]:s[p]+addedScore;
+  droppedL:(removedMarbleIndex#l),(removedMarbleIndex+1) _ l;
+  placeStandard[droppedL;c+1;removedMarbleIndex;s;nextPlayer[p;s]]}
 
 placeStandard:{[l;c;i;s;p]
   nextMarble:c+1;
-
-  // The next marble is one place counter-clockwise from the 0 marble
-  if[i=-2+count l; :(l,nextMarble;nextMarble;i+2;s;(p+1)mod count s)];
-  
-  // The current marble is one place counter-clockwise from the 0 marble
-  if[i=-1+count l; :(l[0],nextMarble,1_l;nextMarble;1;s;(p+1)mod count s)];
-  
-  nextI:i+2;
-  ((nextI#l),nextMarble,nextI _ l;nextMarble;nextI;s;(p+1)mod count s)}
+  $[i=-1+count l;
+    (l[0],nextMarble,1_l;nextMarble;1;s;nextPlayer[p;s]);
+    ((nextI#l),nextMarble,nextI _ l;nextMarble;nextI:(i+2) mod 1+count l;s;nextPlayer[p;s])]}
 
 // Play the marble game for (r) rounds with (p) players.
 play:{[r;p]
   s:p#0;
-  (r-2) .[place;]/ place[0 1;1;1;s;1]}
+  rPrime:r-floor r%23;
+  (rPrime-2) .[place;]/ place[0 1;1;1;s;1]}
+
+// Given a game of (p) players and the (lastMarble)'s value
+// Return the highest score.
+highScore:{[p;lastMarble]
+  g:play[lastMarble;p];
+  max g 3}
+
+answerp1:highScore[nPlayers;lastMarblePoints]
+
+-1 "The answer to part 1 is ",string answerp1;
+-1 "The answer to part 2 is not in Q because I can't make a performant solution using only arrays (So I made a haskell solution using linked lists)"
+
+exit 0
