@@ -4,8 +4,15 @@ g:{`src`dst!`$/:x 5 36} each input
 startNodes:distinct g[`src] except g`dst
 allNodes:distinct g[`src],g`dst
 
+// Returns 1b if x is a subset of y
+subset:{all x in\: y}
+
+// Returns 1b if (node)'s dependencies in (g) are satisfied by (completed)
+k)dependenciesSatisfied:{[g;completed;node]subset[?[g;,(=;`dst;,node);0b;(,`src)!,`src]`src;completed]}
+
+// Returns a list of jobs which can be started immediately.
 availableJobs:{[g;completed;workingSet]
-  allJobs:startNodes,exec dst from g where src in completed;
+  allJobs:startNodes,allNodes where dependenciesSatisfied[g;completed;] each allNodes;
   excludedJobs:completed,raze first each workingSet;
   asc distinct allJobs except excludedJobs}
 
@@ -20,13 +27,10 @@ complete:{[g;n]
     // Assign work
     js:availableJobs[g;completed;workingSet];
     if[and[availableWorkers>0;0<count js:availableJobs[g;completed;workingSet]];
-      -1 raze "[",(string time),"] - Available jobs: ",(", "sv string each js);
-      -1 raze "[",(string time),"] - Available workers: ",string availableWorkers;
       nAssigned:min (availableWorkers;count js);
       jobsStarted:{[time;j](j;time+jobCost j)}[time;] each nAssigned#js;
       workingSet:workingSet,jobsStarted;
       availableWorkers:availableWorkers-nAssigned;
-      -1 raze "[",(string time),"] - Assigning jobs: "," ; "sv {x[0]," ",x 1}each string jobsStarted;
     ];
     
     // Do work
@@ -36,11 +40,13 @@ complete:{[g;n]
     finishedWorkIndices:where time>=last each workingSet;
     if[0<count finishedWorkIndices;
       finishedJobs:(first each workingSet) finishedWorkIndices;
-      -1 raze "[",(string time),"] - Finished jobs: ",(", "sv string each finishedJobs);
       completed:completed,finishedJobs;
       availableWorkers:availableWorkers+count finishedJobs;
       workingSet:workingSet (til count workingSet) except finishedWorkIndices;
    ];
   ];
-  time+1}
+  time}
   
+answerp2:complete[g;5]
+
+-1 "The answer to part 2 is ",string answerp2;
