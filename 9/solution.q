@@ -16,17 +16,18 @@ nextPlayer:{[p;s](p+1)mod count s}
 
 // Pre: c+1 is a multiple of 23
 place23:{[l;c;i;s;p]
-  removedMarbleIndex:(i-7) mod count l;
-  removedMarble:l[removedMarbleIndex];
-  addedScore:(c+1)+removedMarble;
-  s[p]:s[p]+addedScore;
-  droppedL:(removedMarbleIndex#l),(removedMarbleIndex+1) _ l;
-  placeStandard[droppedL;c+1;removedMarbleIndex;s;nextPlayer[p;s]]}
+  removedMarbleIndex:(i-7) mod count l; // Find the marble to be removed
+  removedMarble:l[removedMarbleIndex];  // Get its value
+  addedScore:(c+1)+removedMarble;       // Get the score to be added to
+  s[p]:s[p]+addedScore;                 //   the current player and add it.
+  droppedL:(removedMarbleIndex#l),(removedMarbleIndex+1) _ l; // Remove marble
+  placeStandard[droppedL;c+1;removedMarbleIndex;s;nextPlayer[p;s]]} // Carry on
 
+// Place a marble which isn't a multiple of 23
 placeStandard:{[l;c;i;s;p]
   nextMarble:c+1;
   $[i=-1+count l;
-    (l[0],nextMarble,1_l;nextMarble;1;s;nextPlayer[p;s]);
+    (l[0],nextMarble,1_l;nextMarble;1;s;nextPlayer[p;s]); // List circularity.
     ((nextI#l),nextMarble,nextI _ l;nextMarble;nextI:(i+2) mod 1+count l;s;nextPlayer[p;s])]}
 
 // Play the marble game for (r) rounds with (p) players.
