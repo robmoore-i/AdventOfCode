@@ -24,13 +24,7 @@ class Node:
     if self.n_children == 0:
       return sum(self.metadata)
     else:
-      v = 0
-      for m in self.metadata:
-        if m <= self.n_children:
-          child = self.children[m - 1]
-          v += child.value()
-
-      return v
+      return sum([self.children[m - 1].value() for m in self.metadata if m <= self.n_children])
 
 
 def parse_leaf(l):
