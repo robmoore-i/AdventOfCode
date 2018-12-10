@@ -13,8 +13,9 @@
 (defn parse-line [line]
   (let [
     split-line (str/split line #"=")
-    position (map read-string (map str/trim (str/split (apply str (drop 2 (first (str/split (nth split-line 1) #">")))) #", ")))
-    velocity (map read-string (map str/trim (str/split (drop-edges (second (str/split line #" velocity="))) #", ")))
+    nums-from-csv-line #(map read-string (map str/trim (str/split % #", ")))
+    position (nums-from-csv-line (apply str (drop 2 (first (str/split (nth split-line 1) #">")))))
+    velocity (nums-from-csv-line (drop-edges (second (str/split line #" velocity="))))
   ]
   (cons position [velocity]) ))
 
