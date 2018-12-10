@@ -18,6 +18,9 @@
   ]
   (cons position [velocity]) ))
 
+(defn parse-stars [input]
+  (map parse-line input))
+
 (defn -main []
   (println (count real-input))
-  (println (parse-line (nth real-input 2))) )
+  (println (take 5 (parse-stars real-input))) )
