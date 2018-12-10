@@ -12,10 +12,10 @@
 
 (defn parse-line [line]
   (let [
-    split-line (str/split line #"=")
+    split-line (str/split line #"> velocity=")
     nums-from-csv-line #(map read-string (map str/trim (str/split % #", ")))
-    position (nums-from-csv-line (apply str (drop 10 (first (str/split line #"> velocity")))))
-    velocity (nums-from-csv-line (drop-edges (second (str/split line #" velocity="))))
+    position (nums-from-csv-line (apply str (drop 10 (first split-line))))
+    velocity (nums-from-csv-line (drop-edges (second split-line)))
   ]
   (cons position [velocity]) ))
 
@@ -24,4 +24,4 @@
 
 (defn -main []
   (println (count real-input))
-  (println (parse-line "position=<-41660, -20869> velocity=<-4, -2>") ))
+  (println (take 5 (parse-stars real-input)) ))
