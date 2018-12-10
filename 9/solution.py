@@ -96,6 +96,6 @@ def highScore(p, lastMarbleValue):
     return max(scores.values())
 
 print("The answer to part 1 is " + str(highScore(439, 71307)))
-print("The answer to part 2 is " + str(highScore(439, 71307 * 100)))
+# print("The answer to part 2 is " + str(highScore(439, 71307 * 100)))
 
 exit(0)
