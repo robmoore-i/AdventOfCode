@@ -7,8 +7,7 @@
 (def real-input (str/split (slurp "input/input.txt") #"\n") )
 
 (defn drop-edges [s]
-  (let [l (count s)]
-  (subs s 1 (- l 1))))  
+  (subs s 1 (- (count s) 1)))
 
 (defn parse-line [line]
   (let [
