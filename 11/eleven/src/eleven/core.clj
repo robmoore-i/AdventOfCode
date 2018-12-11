@@ -52,18 +52,22 @@
   ]
   score))
 
+(defn max-index [vec]
+  (first (apply max-key second (map-indexed vector vec))))
+
 (defn max-kernel-score [grid]
   (let [
     coordinate-range (range 1 (- (count grid) 1))
     kernel-markers (matrix (self-cross coordinate-range))
     kernel-scores (map (partial apply (partial score-kernel grid)) kernel-markers)
-    max-kernel-score (apply max kernel-scores)
+    max-kernel-score-idx (max-index kernel-scores)
+    max-kernel-score-markers (nth kernel-markers max-kernel-score-idx)
+    score (nth kernel-scores max-kernel-score-idx)
   ]
-  max-kernel-score))
+  (cons score max-kernel-score-markers)))
 
 (defn max-grid-score [grid-serial-number side-legth]
   (max-kernel-score (build-grid grid-serial-number side-legth)))
 
 (defn -main []
-  (println (build-grid 42 5) )
   (println (max-grid-score 18 50) ) )
