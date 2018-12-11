@@ -21,4 +21,4 @@
   power-level))
 
 (defn -main []
-  (println  (cell-power-level 57 122 79)  ))
+  (println 0 ))
