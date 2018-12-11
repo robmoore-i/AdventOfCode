@@ -38,11 +38,11 @@
   ]
   vector-power-grid ))
 
-;; Where [x y] marks the top left corner of the 3x3 kernel.
+;; Where [x y] marks the top left corner of the 3x3 kernel in 1-based coordinates.
 (defn score-kernel [grid x y]
   (let [
-    x-coordinates (range x (+ x 3))
-    y-coordinates (range y (+ y 3))
+    x-coordinates (range (- x 1) (+ x 2))
+    y-coordinates (range (- y 1) (+ y 2))
     indices (matrix (combo/cartesian-product x-coordinates y-coordinates))
     power-values (map (partial get-in grid) indices)
     score (reduce + power-values)
