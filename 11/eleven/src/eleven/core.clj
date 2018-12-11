@@ -51,4 +51,4 @@
 
 (defn -main []
   (println (build-grid 42 5) )
-  (println (score-kernel (build-grid 42 5) 0 0) ) )
+  (println (score-kernel (build-grid 42 5) 1 1) ) )
