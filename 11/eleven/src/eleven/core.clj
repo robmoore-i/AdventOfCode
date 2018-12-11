@@ -1,7 +1,8 @@
 (ns eleven.core
   (:gen-class)
-  (:require [clojure.java.io :as io] )
-  (:require [clojure.string :as str] ))
+  (:require [clojure.java.io :as io])
+  (:require [clojure.string :as str])
+  (:require [clojure.math.combinatorics :as combo]) )
 
 (def input 3031)
 
@@ -20,5 +21,15 @@
   ]
   power-level))
 
+(defn build-grid [grid-serial-number side-length]
+  (let [
+    coordinate-range (range 1 (+ side-length 1))
+    grid (combo/cartesian-product coordinate-range coordinate-range)
+    power-level (partial apply (partial cell-power-level grid-serial-number))
+    cell-power-levels (map power-level grid)
+    power-annotated-grid (partition side-length cell-power-levels)
+  ]
+  power-annotated-grid ))
+
 (defn -main []
-  (println 0 ))
+  (println (build-grid 42 5) ))
