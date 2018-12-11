@@ -14,4 +14,7 @@
     (is (= 30 (score-kernel (build-grid 42 100) 21 61)))
     (is (= 29 (score-kernel (build-grid 18 50) 33 45)))))
 
-
+(deftest can-get-max-grid-score
+  (testing "Can find the maximum score among all grid kernels"
+    (is (= 30 (max-grid-score 42 65)))
+    (is (= 29 (max-grid-score 18 50)))))

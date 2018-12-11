@@ -28,10 +28,13 @@
   (let [list-partitioned (partition n l)]
   (matrix list-partitioned)))
 
+(defn self-cross [l]
+  (combo/cartesian-product l l))
+
 (defn build-grid [grid-serial-number side-length]
   (let [
     coordinate-range (range 1 (+ side-length 1))
-    grid (combo/cartesian-product coordinate-range coordinate-range)
+    grid (self-cross coordinate-range)
     power-level (partial apply (partial cell-power-level grid-serial-number))
     cell-power-levels (map power-level grid)
     vector-power-grid (vector-partition side-length cell-power-levels)
@@ -49,6 +52,18 @@
   ]
   score))
 
+(defn max-kernel-score [grid]
+  (let [
+    coordinate-range (range 1 (- (count grid) 1))
+    kernel-markers (matrix (self-cross coordinate-range))
+    kernel-scores (map (partial apply (partial score-kernel grid)) kernel-markers)
+    max-kernel-score (apply max kernel-scores)
+  ]
+  max-kernel-score))
+
+(defn max-grid-score [grid-serial-number side-legth]
+  (max-kernel-score (build-grid grid-serial-number side-legth)))
+
 (defn -main []
   (println (build-grid 42 5) )
-  (println (score-kernel (build-grid 42 5) 1 1) ) )
+  (println (max-grid-score 18 50) ) )
