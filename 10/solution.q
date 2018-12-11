@@ -17,7 +17,7 @@ findSmallDimensionIterations:{[n;start]
     (messageIteration;positivise iterations messageIteration)}
 printCanvas:{-1 ("\n" sv makeCanvas x),"\n"}
 
-`answerp1`answerPoints set' findSmallDimensionIterations[25000;start];
+`answerp1`answerPoints set' findSmallDimensionIterations[11000;start];
 answerp2:264_/:244_ makeCanvas answerPoints
 
 -1 "The answer to part 1 is ",string answerp1;
