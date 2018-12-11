@@ -17,4 +17,5 @@
 (deftest can-get-max-grid-score-and-position
   (testing "Can find the maximum scoring kernel and its position among all grid kernels"
     (is (= '(30 21 61) (max-grid-score 42 65)))
-    (is (= '(29 33 45) (max-grid-score 18 50)))))
+    (is (= '(29 33 45) (max-grid-score 18 50)))
+    (is (= '(30 21 76) (max-grid-score 3031 300)))))
