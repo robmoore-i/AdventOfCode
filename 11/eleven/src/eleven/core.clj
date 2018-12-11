@@ -69,5 +69,7 @@
 (defn max-grid-score [grid-serial-number side-legth]
   (max-kernel-score (build-grid grid-serial-number side-legth)))
 
+(def answerp1 (max-grid-score 3031 300))
+
 (defn -main []
-  (println (max-grid-score 18 50) ) )
+  (println  answerp1))
