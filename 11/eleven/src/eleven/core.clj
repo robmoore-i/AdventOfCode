@@ -98,6 +98,58 @@
   ]
   final-result))
 
+;; Bottom up max scoring kernel strategy
+;; In this, we move the kernel from the top left corner of the grid downwards,
+;; using memoization (dynamic programming) to reduce computation.
+;; This is way too complicated for me to attempt to implement in Clojure.
+;; I will do this in Kotlin or Python at some point.
+
+;; Let K(x, y, n) be the kernel score at (x, y) for kernel size n.
+;; Let C(x, y, n) be the sum of the column starting at (x, y) descending by n
+;; Let R(x, y, n) be the sum of the row starting at (x, y) moving rightwards by n
+;; For all (x, y):
+;; K(x, y, n + 1) = K(x, y, n) + C(x + n - 1, y, n - 1) + R(x, y + n - 1, n)
+
+;; We can also economically calculate the functions C and R using the grid, G:
+;; There are multiple ways we can try to reduce computation here.
+;; C(x, y, n) = C(x, y, n - 1) + G(x, y + n - 1)
+;; R(x, y, n) = R(x, y, n - 1) + G(x + n - 1, y)
+;; C(x, y, n) = C(x, y - 1, n) + G(x, y + n - 1) - G(x, y - 1)
+;; R(x, y, n) = R(x - 1, y, n) + G(x + n - 1, y) - G(x - 1, y)
+;; We can use a memoization strategy here as well but it will be more
+;; complicated because there are more free variables.
+
+;; When searching in kernels of size n having completed a search of n - 1, if
+;; the current max scoring kernel has score S, then we can disregard
+;; all points (x, y) such that 4(2n - 1) < S - K(x, y, n - 1)
+;; However, this means that for all points (x, y), we have to store the largest
+;; kernel size for which we have calculated its value. Whenever we're looking to
+;; reduce our search space in kernel size n, we check if there is a chance that
+;; the n-kernel at (x, y) has a chance of being the largest by considering all
+;; unseen values for that kernel to be 4.
+
+;; Algorithm
+;; Score the 3x3 kernels exhaustively. From this, create a map:
+;; M: (x, y) -> (n, score)
+;; n is the largest kernel for which (x, y) has been accurately scored
+;; score is the score of (x, y) using an n-kernel
+;; For each (x, y) when scoring with n-kernels and where the highest score is S:
+;;   get M(x, y).
+;;   get the maximum potential value of the uncalculated region:
+;;     4 * Sum 2m - 1 for all m such that M(x, y)[n] < m and m <= n.
+;;   get the maximum possible value for K(x, y, n), max-K(n)
+;;     = K(x, y, M(x, y)[n]) + the maximum potential value of the uncalculated region
+;;     = M(x, y)[score] + the maximum potential value of the uncalculated region
+;;   if max-K(n) < S, continue without doing anything
+;;   else determine and save K(x, y, n)
+;;     get the true value of the uncalculated region, R
+;;       For all m such that M(x, y)[n] < m and m <= n:
+;;         + C(x + m - 1, y, m - 1) + R(x, y + m - 1, m)
+;;     K(x, y, n) = R + M(x, y)[score]
+;;     save M(x, y) = (n, K(x, y, n))
+;;     if K(x, y, n) > S, set S = K(x, y, n).
+;;   continue to the next point
+
 (def answerp1 (max-grid-score 3031 300 3))
 
 (defn -main []
