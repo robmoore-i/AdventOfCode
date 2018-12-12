@@ -72,7 +72,7 @@
 (defn append [x coll]
   (apply conj (list x) (reverse coll)))
 
-(defn max-scoring-kernel-iteration [grid current-max-score kernel-sizes]
+(defn max-scoring-kernel-top-down-iteration [grid current-max-score kernel-sizes]
   (let [
     candidate-kernel-size (first kernel-sizes)
 
@@ -85,11 +85,11 @@
   ]
   (list new-max-score remaining-kernel-sizes)))
 
-(defn max-scoring-kernel [grid-serial-number side-length max-kernel-size]
+(defn max-scoring-kernel-top-down [grid-serial-number side-length max-kernel-size]
   (let [
     grid (build-grid grid-serial-number side-length)
     kernel-sizes (reverse (range 3 (+ max-kernel-size 1)))
-    find-max-score (partial max-scoring-kernel-iteration grid)
+    find-max-score (partial max-scoring-kernel-top-down-iteration grid)
 
     iter-one (find-max-score '(0 1 1 0) kernel-sizes)
     iter #(if (= 0 (count (second %))) % (apply find-max-score %))
@@ -101,4 +101,4 @@
 (def answerp1 (max-grid-score 3031 300 3))
 
 (defn -main []
-  (println (max-scoring-kernel 3031 300 5)))
+  (println (max-grid-score 3031 300 5)))

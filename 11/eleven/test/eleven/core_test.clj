@@ -26,4 +26,4 @@
 
 (deftest can-get-max-scoring-kernel-size
   (testing "Can find the kernel size where its score is maximised"
-    (is (= (list (list 59 241 119 5) (list 4)) (max-scoring-kernel 3031 300 5)))))
+    (is (= (list (list 59 241 119 5) (list 4)) (max-scoring-kernel-top-down 3031 300 5)))))
