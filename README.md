@@ -17,3 +17,10 @@
 8: Python (trees)
 
 9: Python (circular doubly linked lists)
+
+10. Q (ASCII moving stars)
+
+11. Clojure (Kernel sums on a grid [part 1 only])
+
+On day 11 I came off the bench again so unfortunately I can't be doing AoC
+outside of weekends and after work. Hope this can help fellow Q-ists.
