@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.rrm.aoc.AocProblem05Test" tests="2" skipped="0" failures="0" errors="0" timestamp="2022-12-10T13:07:00" hostname="Robs-MacBook-Pro-2.local" time="0.026">
+  <properties/>
+  <testcase name="tOne()" classname="com.rrm.aoc.AocProblem05Test" time="0.025"/>
+  <testcase name="tTwo()" classname="com.rrm.aoc.AocProblem05Test" time="0.001"/>
+  <system-out><![CDATA[[C]
+[M]
+[P, D, N, Z]
+
+CMZ
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
