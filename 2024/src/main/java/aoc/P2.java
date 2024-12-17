@@ -1,6 +1,5 @@
 package aoc;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -14,15 +13,21 @@ public class P2 {
         var puzzleInput = Paths.get("2024/puzzle_inputs/puzzle_input_2.txt");
         var reports = Files.readAllLines(puzzleInput).parallelStream()
             .filter(it -> !it.isBlank())
-            .map(line -> new Report(Arrays.stream(line.split(" ")).map(Integer::parseInt).toList()))
+            .map(line -> new Report(
+                Arrays.stream(line.split(" "))
+                    .map(Integer::parseInt)
+                    .toList()
+            ))
             .toList();
-        var numSafeReports = reports.parallelStream().filter(Report::isSafe).count();
+        var numSafeReports = reports.parallelStream()
+            .filter(report -> report.isSafe(true))
+            .count();
         System.out.println(numSafeReports);
     }
 
     private record Report(List<Integer> levels) {
 
-        public boolean isSafe() {
+        public boolean isSafe(boolean problemDampener) {
             if (levels.size() <= 1) {
                 return true;
             }
@@ -34,8 +39,26 @@ public class P2 {
 
             boolean smallCondition = differences.parallelStream().map(Math::abs).allMatch(it -> it >= 1 && it <= 3);
             boolean sameSignCondition = differences.parallelStream().allMatch(it -> it > 0) || differences.parallelStream().allMatch(it -> it < 0);
+            boolean safeWithoutProblemDampener = smallCondition && sameSignCondition;
+            if (safeWithoutProblemDampener) {
+                return true;
+            }
+            if (!problemDampener) {
+                return false;
+            }
 
-            return smallCondition && sameSignCondition;
+            return dampenedReports().parallelStream()
+                .anyMatch(report -> report.isSafe(false));
+        }
+
+        private List<Report> dampenedReports() {
+            ArrayList<Report> reports = new ArrayList<>(levels.size() - 1);
+            for (int i = 0; i < levels.size(); i++) {
+                var newLevels = new ArrayList<>(levels);
+                newLevels.remove(i);
+                reports.add(new Report(newLevels));
+            }
+            return reports;
         }
     }
 }
